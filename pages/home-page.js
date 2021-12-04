@@ -88,13 +88,13 @@ function HomePage() {
     return itemsOnCart.includes(item.name);
   }
 
-  function renderFooter() {
+  const renderFooter = React.memo(() => {
     return (
       <View style={{flex: 1}}>
         <ActivityIndicator size="large" color="#5aa897" />
       </View>
     );
-  }
+  });
 
   if (isResponseFailed) {
     return (
