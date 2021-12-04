@@ -23,11 +23,6 @@ function OrderCounter({countChangeEvent, count = 0}) {
     if (type == 'plus') {
       count = Number(orderCount) + 1;
     } else {
-      if (orderCount < 0) {
-        setOrderCount(0);
-        countChangeEvent(0);
-        return;
-      }
       count = orderCount - 1;
     }
 
