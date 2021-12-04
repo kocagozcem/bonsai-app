@@ -91,7 +91,7 @@ function HomePage() {
   function renderFooter() {
     return (
       <View style={{flex: 1}}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#5aa897" />
       </View>
     );
   }
