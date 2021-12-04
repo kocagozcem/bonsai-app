@@ -1,0 +1,21 @@
+{
+  "name": "fake-backend",
+  "version": "1.0.0",
+  "description": "fake backend for bonsai app",
+  "main": "index.js",
+  "scripts": {
+    "start": "adb -s emulator-5554 reverse tcp:3000 tcp:3000 && npx json-server --watch ./src/db.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "fake",
+    "backend",
+    "bonsai",
+    "app"
+  ],
+  "author": "cem kocagoz",
+  "license": "ISC",
+  "dependencies": {
+    "json-server": "^0.16.3"
+  }
+}

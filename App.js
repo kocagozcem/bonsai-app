@@ -7,24 +7,30 @@ import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import HomePage from './pages/home-page';
 import WalkthroughPage from './pages/walkthrough-page';
 import SearchPage from './pages/search-page';
+import CartPage from './pages/cart-page';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {HeaderBackButton} from '@react-navigation/stack';
+import Logo from './components/atoms/logo/logo';
 
-const options = {headerShown: false};
-const tabBarOptions = {keyboardHidesTabBar: true};
-const pages = [
-  {
-    image:
-      'https://i.pinimg.com/originals/f4/a2/6f/f4a26fefa43e0bb33b7faf8fd16d528f.png',
-    text: 'Find the Bonsai that will suite to your place',
-    buttonText: 'Next',
+const bonsaiGreen = '#5aa897';
+const options = {
+  headerStyle: {
+    backgroundColor: bonsaiGreen,
   },
-  {
-    image:
-      'https://images.vexels.com/media/users/3/199964/isolated/preview/ae782cab8ae7e722febb5869c09574cc-happy-delivery-boy-character-by-vexels.png',
-    text: 'Let us deliver it for you',
-    buttonText: 'Complete',
+  headerTintColor: '#fff',
+  headerTitleStyle: {
+    fontWeight: 'bold',
+    color: 'white',
   },
-];
+};
+const optionsHideHeader = {headerShown: false};
+
+const tabBarOptions = {
+  keyboardHidesTabBar: true,
+  activeTintColor: bonsaiGreen,
+  inactiveTintColor: 'gray',
+  labelStyle: {fontWeight: 'bold', fontSize: 13},
+};
 
 function TabNavigation() {
   return (
@@ -33,20 +39,32 @@ function TabNavigation() {
         name="Home"
         component={HomePage}
         options={{
-          ...options,
+          gesturesEnabled: true,
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
         }}
       />
       <Tab.Screen
-        name="Search"
-        component={SearchPage}
+        name="Cart"
+        component={CartPage}
         options={{
-          ...options,
+          ...optionsHideHeader,
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons name="magnify" color={color} size={size} />
           ),
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="Search"
+        component={SearchPage}
+        options={{
+          ...optionsHideHeader,
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons name="magnify" color={color} size={size} />
+          ),
+          headerShown: false,
         }}
       />
     </Tab.Navigator>
@@ -55,19 +73,26 @@ function TabNavigation() {
 
 function App() {
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <StatusBar barStyle="dark-content" />
+    <SafeAreaView style={styles.content}>
+      <StatusBar barStyle="light-content" backgroundColor={bonsaiGreen} />
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
             name="Walkthrough"
             component={WalkthroughPage}
-            options={options}
+            options={optionsHideHeader}
           />
           <Stack.Screen
             name="Home"
             component={TabNavigation}
-            options={options}
+            options={{
+              headerTitle: props => <Logo />,
+              headerTitleAlign: 'center',
+              headerLeft: null,
+              headerStyle: {
+                backgroundColor: '#f2f2f2',
+              },
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>
@@ -81,6 +106,7 @@ const Stack = createStackNavigator();
 const styles = StyleSheet.create({
   content: {
     flex: 1,
+    backgroundColor: '#fff',
   },
 });
 
