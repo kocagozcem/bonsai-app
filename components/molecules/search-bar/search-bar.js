@@ -4,10 +4,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {lg, md, xxl} from '../../../constants/sizes';
 import {lgText, mdText} from '../../../constants/text-sizes';
 
-function SearchBar(props) {
+function SearchBar() {
   const inputRef = useRef(null);
   const [inputValue, setInputValue] = useState('');
-  const {valInput} = props;
 
   function valChanged(text) {
     // valInput(text);
