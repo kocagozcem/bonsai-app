@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -11,6 +11,7 @@ import CartPage from './pages/cart-page';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {HeaderBackButton} from '@react-navigation/stack';
 import Logo from './components/atoms/logo/logo';
+import {BonsaiContext} from './contextApi/context';
 
 const bonsaiGreen = '#5aa897';
 const options = {
@@ -30,6 +31,7 @@ const tabBarOptions = {
   activeTintColor: bonsaiGreen,
   inactiveTintColor: 'gray',
   labelStyle: {fontWeight: 'bold', fontSize: 13},
+  ...optionsHideHeader,
 };
 
 function TabNavigation() {
@@ -39,10 +41,12 @@ function TabNavigation() {
         name="Home"
         component={HomePage}
         options={{
+          ...optionsHideHeader,
           gesturesEnabled: true,
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -74,28 +78,30 @@ function TabNavigation() {
 function App() {
   return (
     <SafeAreaView style={styles.content}>
-      <StatusBar barStyle="light-content" backgroundColor={bonsaiGreen} />
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Walkthrough"
-            component={WalkthroughPage}
-            options={optionsHideHeader}
-          />
-          <Stack.Screen
-            name="Home"
-            component={TabNavigation}
-            options={{
-              headerTitle: props => <Logo />,
-              headerTitleAlign: 'center',
-              headerLeft: null,
-              headerStyle: {
-                backgroundColor: '#f2f2f2',
-              },
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <BonsaiContext>
+        <StatusBar barStyle="light-content" backgroundColor={bonsaiGreen} />
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Walkthrough"
+              component={WalkthroughPage}
+              options={optionsHideHeader}
+            />
+            <Stack.Screen
+              name="Home"
+              component={TabNavigation}
+              options={{
+                headerTitle: props => <Logo />,
+                headerTitleAlign: 'center',
+                headerLeft: null,
+                headerStyle: {
+                  backgroundColor: '#f2f2f2',
+                },
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </BonsaiContext>
     </SafeAreaView>
   );
 }
