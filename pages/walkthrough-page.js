@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, Dimensions} from 'react-native';
 import Walkthrough from '../components/organisms/walkthrough/walkthrough';
+import PageLayout from '../layouts/page-layout';
 
 const pages = [
   {
@@ -22,7 +23,11 @@ function WalkthroughPage({navigation}) {
     navigation.navigate('Home');
   }
 
-  return <Walkthrough pages={pages} closeAction={closeWalkthrough} />;
+  return (
+    <PageLayout noPadding>
+      <Walkthrough pages={pages} closeAction={closeWalkthrough} />
+    </PageLayout>
+  );
 }
 
 const styles = StyleSheet.create({});

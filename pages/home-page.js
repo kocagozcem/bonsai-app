@@ -5,6 +5,7 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Thumbnail from '../components/molecules/thumbnail/thumbnail';
@@ -12,7 +13,8 @@ import Button from '../components/molecules/button/button';
 import {Invoker} from '../utils';
 import {lgText} from '../constants/text-sizes';
 import {xs} from '../constants/sizes';
-import {result} from 'lodash';
+import PageLayout from '../layouts/page-layout';
+import ProductDetails from '../components/organisms/product-details/product-details';
 
 function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -22,10 +24,15 @@ function HomePage() {
   const [isLastPage, setIsLastPage] = useState(false);
   const [isGettingMore, setIsGettingMore] = useState(false);
   const [itemsOnCart, setItemsOnCart] = useState([]);
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [productDetails, setProductDetails] = useState(null);
 
   useEffect(async () => {
-    setItemsOnCart([]);
     getBonsaiList(page);
+
+    return function cleanup() {
+      showProductModal(false);
+    };
   }, []);
 
   const getItemLayout = useCallback(
@@ -79,15 +86,6 @@ function HomePage() {
     getBonsaiList(page + 1);
   }
 
-  async function getAllFromStorage() {
-    const keys = await AsyncStorage.getAllKeys();
-    return keys;
-  }
-
-  function checkIfInChart(item) {
-    return itemsOnCart.includes(item.name);
-  }
-
   const renderFooter = React.memo(() => {
     return (
       <View style={{flex: 1}}>
@@ -116,10 +114,20 @@ function HomePage() {
   }
 
   const renderItem = ({item}) => (
-    <View style={{width: '32%'}}>
-      <Thumbnail plant={item} isInCart={checkIfInChart(item)} />
-    </View>
+    <TouchableOpacity
+      style={{width: '32%'}}
+      onPress={() => {
+        setProductDetails(item);
+        setShowProductModal(true);
+      }}>
+      <Thumbnail plant={item} />
+    </TouchableOpacity>
   );
+
+  function closeProductDetails() {
+    setProductDetails(null);
+    setShowProductModal(false);
+  }
 
   if (isLoading) {
     return (
@@ -131,7 +139,7 @@ function HomePage() {
   }
 
   return (
-    <View style={styles.content}>
+    <PageLayout>
       <ActivityIndicator />
       <FlatList
         data={bonsaiList}
@@ -143,25 +151,22 @@ function HomePage() {
         onEndReached={!isLastPage && !isGettingMore ? loadMore : null}
         ListFooterComponent={isGettingMore ? renderFooter : null}
         removeClippedSubviews
-        ListFooterComponentStyle={{
-          flex: 1,
-          padding: 20,
-        }}
+        ListFooterComponentStyle={styles.footer}
         windowSize={12}
         getItemLayout={getItemLayout}
         onEndReachedThreshold={0.5}
       />
-    </View>
+
+      <ProductDetails
+        product={productDetails}
+        toggleProductDetailModal={showProductModal}
+        closeModal={closeProductDetails}
+      />
+    </PageLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    padding: 16,
-    paddingBottom: 0,
-  },
-
   centered: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -171,6 +176,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: lgText,
     marginBottom: xs,
+  },
+
+  footer: {
+    flex: 1,
+    padding: 20,
   },
 });
 
