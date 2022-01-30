@@ -1,47 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {sm, md} from '../../../constants/sizes';
 import {lgText, mdText} from '../../../constants/text-sizes';
-import OrderCounter from '../../atoms/order-counter/order-counter';
 
-function Thumbnail({plant, isInCart, style}) {
-  const [count, setCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(isInCart);
-  console.log(plant.id);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      async function getData() {
-        const data = await AsyncStorage.getItem(plant.name);
-
-        return data;
-      }
-
-      let cnt;
-
-      getData().then(val => {
-        cnt = Number(val) || 0;
-        if (cnt !== count) {
-          setIsLoading(true);
-          setCount(cnt);
-          setIsLoading(false);
-        }
-      });
-    }, []),
-  );
-
-  // Function to pass to the order-counter component.
-  async function cartHandler(count) {
-    if (count > 0) {
-      await AsyncStorage.setItem(plant.name, String(count));
-    } else {
-      await AsyncStorage.removeItem(plant.name);
-    }
-  }
-
-  if (plant !== null && !isLoading) {
+function Thumbnail({plant, style}) {
+  if (plant !== null) {
     return (
       <View style={[styles.card, style]}>
         <View style={styles.imageContainer}>
@@ -63,12 +26,6 @@ function Thumbnail({plant, isInCart, style}) {
           <View style={styles.scoreContainer}>
             <Text style={styles.scoreText}>${plant.price}</Text>
           </View>
-        </View>
-        <View style={styles.counterContainer}>
-          <OrderCounter
-            count={count}
-            countChangeEvent={cnt => cartHandler(cnt)}
-          />
         </View>
       </View>
     );
@@ -123,12 +80,6 @@ const styles = StyleSheet.create({
     fontSize: lgText,
     fontWeight: 'bold',
     color: '#5aa897',
-  },
-  counterContainer: {
-    zIndex: 10,
-    position: 'absolute',
-    right: 10,
-    top: 10,
   },
 });
 
