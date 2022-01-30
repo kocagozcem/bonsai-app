@@ -5,10 +5,12 @@ import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {xlText} from '../../../constants/text-sizes';
 
-function OrderCounter({countChangeEvent, count = 0}) {
-  const [orderCount, setOrderCount] = useState(count);
+function OrderCounter({countChangeEvent = () => {}, count = 0}) {
+  const [orderCount, setOrderCount] = useState(0);
 
-  useEffect(() => {}, [count]);
+  useEffect(() => {
+    setOrderCount(count);
+  }, []);
 
   function button(icon, event) {
     return (

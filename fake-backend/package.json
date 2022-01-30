@@ -4,7 +4,7 @@
   "description": "fake backend for bonsai app",
   "main": "index.js",
   "scripts": {
-    "start": "adb -s emulator-5554 reverse tcp:3000 tcp:3000 && npx json-server --watch ./src/db.json",
+    "start": "adb -s emulator-5554 reverse tcp:3000 tcp:3000 && node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

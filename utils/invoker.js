@@ -1,26 +1,5 @@
 import {ToastAndroid, Platform, AlertIOS} from 'react-native';
 
-// async function callService(baseUrl, endPoint = '', params = {}, options = {}) {
-//   let ok = false;
-
-//   let result = fetch(
-//     `${baseUrl}/${endPoint}?${new URLSearchParams(params).toString()}`,
-//     options,
-//   )
-//     .then(
-//       (response = async () => {
-//         ok = reponse.ok;
-//         let r = response.json();
-
-//         return r;
-//       }),
-//     )
-//     .then(response => response)
-//     .catch(err => notifyMessage(err));
-
-//   return {result, ok};
-// }
-
 async function callService(baseUrl, endPoint = '', params = {}, options = {}) {
   let ok;
   let result;
